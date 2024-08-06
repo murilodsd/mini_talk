@@ -6,17 +6,18 @@
 /*   By: mde-souz <mde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 10:05:57 by mde-souz          #+#    #+#             */
-/*   Updated: 2024/07/22 21:59:21 by mde-souz         ###   ########.fr       */
+/*   Updated: 2024/08/05 18:21:39 by mde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_talk.h"
 
-int	count;
+extern int g_bit_received;
 
 static void	handler_sigusr(int sig)
 {
 	(void)sig;
+	g_bit_received = 1;
 	return ;
 }
 
@@ -24,7 +25,6 @@ int main(int argc, char *argv[])
 {
 	int	pid_server;
 	
-	count = 0;
 	pid_server = ft_atoi(argv[1]);
 	if (argc != 3)
 		exit(EXIT_FAILURE);

@@ -6,11 +6,13 @@
 /*   By: mde-souz <mde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 17:01:12 by mde-souz          #+#    #+#             */
-/*   Updated: 2024/07/22 18:16:48 by mde-souz         ###   ########.fr       */
+/*   Updated: 2024/08/05 18:26:36 by mde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_talk.h"
+
+int	g_bit_received;
 
 void	send_str_with_signal(int pid, char *str)
 {
@@ -23,6 +25,7 @@ void	send_str_with_signal(int pid, char *str)
 		byte = ft_char_to_byte(str[j]);
 		while (*byte)
 		{
+			g_bit_received = 0;
 			if (*byte++ == '0')
 			{
 				while (kill(pid, SIGUSR1) == -1)
@@ -33,8 +36,9 @@ void	send_str_with_signal(int pid, char *str)
 				while (kill(pid, SIGUSR2) == -1)
 					;
 			}		
-			pause();
-			usleep(125);
+			while (!g_bit_received)
+				;
+			usleep(100);
 		}
 		j++;
 	}

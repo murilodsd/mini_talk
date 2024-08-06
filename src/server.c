@@ -6,7 +6,7 @@
 /*   By: mde-souz <mde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 19:36:21 by mde-souz          #+#    #+#             */
-/*   Updated: 2024/07/22 22:01:44 by mde-souz         ###   ########.fr       */
+/*   Updated: 2024/08/05 18:27:37 by mde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ static void	get_bytes_print_string(int pid_client)
 				while (kill(pid_client, SIGUSR1) == -1)
 					;
 			pause();
-			usleep(100);
 			byte++;
 			i--;
 		}
