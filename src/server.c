@@ -6,89 +6,73 @@
 /*   By: mde-souz <mde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 19:36:21 by mde-souz          #+#    #+#             */
-/*   Updated: 2024/08/05 18:27:37 by mde-souz         ###   ########.fr       */
+/*   Updated: 2024/08/06 19:25:16 by mde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_talk.h"
+#include <stdlib.h>
+#include <signal.h>
+#include <unistd.h>
 
-char	*byte;
+char	*g_byte;
 
-static void	handler_sigusr(int sig)
+void	print_error_and_exit(char *error)
 {
+	ft_printf(2, "%s", error);
+	exit(EXIT_FAILURE);
+}
+
+static void	handler_sigusr(int sig, siginfo_t *si, void *context)
+{
+	(void)context;
 	if (sig == SIGUSR1)
-		*byte = '0';
+		*g_byte = '0';
 	else
-		*byte = '1';
-}
-static void	get_bytes_print_string(int pid_client)
-{
-	char	*byte_start;
-	int		i;
-	
-	byte_start = byte;
-	while (1)
-	{		
-		i = 8;
-		while (i)
-		{
-			if (i != 8)
-				while (kill(pid_client, SIGUSR1) == -1)
-					;
-			pause();
-			byte++;
-			i--;
-		}
-		byte = byte_start;
-		if (ft_byte_to_char(byte_start) == 0)
-			break;
-		ft_printf(1, "%c", ft_byte_to_char(byte_start));
-		while (kill(pid_client, SIGUSR1) == -1)
-			;
-	}	
+		*g_byte = '1';
+	g_byte++;
+	if (kill(si->si_pid, SIGUSR1) == -1)
+		print_error_and_exit("kill function failed");
 }
 
-static int	get_pid_client(void)
+static void	get_bytes_print_string(void)
 {
 	char	*byte_start;
-	int		pid_client;
 	int		i;
-	
-	byte_start = byte;
-	pid_client = 0;
+
+	byte_start = g_byte;
 	while (1)
 	{
 		i = 8;
 		while (i--)
-		{
 			pause();
-			byte++;
-		}
-		byte = byte_start;
-		if (ft_byte_to_char(byte) == 0)
-			return (pid_client);
-		pid_client = pid_client * 10 + (ft_byte_to_char(byte) - '0');
+		g_byte = byte_start;
+		if (ft_byte_to_char(byte_start) == 0)
+			break ;
+		ft_printf(1, "%c", ft_byte_to_char(byte_start));
 	}
 }
 
-int main(void)
+int	main(void)
 {
-	int		pid_client;
+	struct sigaction	sa;
 
-	signal(SIGUSR1,handler_sigusr);
-	signal(SIGUSR2,handler_sigusr);
-	byte = ft_calloc(9, sizeof(char));
-	if (!byte)
+	ft_bzero(&sa, sizeof(sa));
+	sa.sa_flags = SA_SIGINFO | SA_RESTART;
+	sa.sa_sigaction = handler_sigusr;
+	if (sigaction(SIGUSR1, &sa, NULL) == -1)
+		print_error_and_exit("Sigaction failed");
+	if (sigaction(SIGUSR2, &sa, NULL) == -1)
+		print_error_and_exit("Sigaction failed");
+	g_byte = ft_calloc(9, sizeof(char));
+	if (!g_byte)
 		exit(EXIT_FAILURE);
-	ft_printf(1, "SERVER PID: %d\n",getpid());
+	ft_printf(1, "SERVER PID: %d\n", getpid());
 	while (1)
 	{
-		pid_client = get_pid_client();
-		get_bytes_print_string(pid_client);
-		while (kill(pid_client, SIGUSR1) == -1)
-			;
-		ft_printf(1,"\n");
+		get_bytes_print_string();
+		ft_printf(1, "\n");
 	}
-	free(byte);
-	return 0;
+	free(g_byte);
+	return (0);
 }

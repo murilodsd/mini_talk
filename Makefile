@@ -17,19 +17,22 @@ OBJS_NAMES_CLIENT=$(SRCS_NAMES_CLIENT:.c=.o)
 OBJS_CLIENT=$(addprefix $(OBJ_PATH), $(OBJS_NAMES_CLIENT))
 #OBJS_NAMES_BONUS=$(SRCS_NAMES_BONUS:.c=.o)
 #OBJS_BONUS=$(addprefix $(OBJ_PATH), $(OBJS_NAMES_BONUS))
-LIBS=-lft
-LIB_PATH=-L lib
+LIB_STATIC_NAME = libft.a
+LIB_PATH=lib/
+LIBS_FLAGS=-l$(patsubst lib%.a, %, $(LIB_STATIC_NAME)) -L$(LIB_PATH)
+LIB_STATIC = $(addprefix $(LIB_PATH) , $(INCLUDE_PATH))
 INCLUDE_PATH=./include/ ./lib/*/include/
-INCLUDE=$(addprefix -I , $(INCLUDE_PATH))
+INCLUDE_FLAG=$(addprefix -I , $(INCLUDE_PATH))
+
 RM=rm -f
 
 all: libs $(NAME_SERVER) $(NAME_CLIENT) 
 
-$(NAME_SERVER): $(OBJS_SERVER)
-	$(CC) $(CCFLAGS) $(OBJS_SERVER) $(INCLUDE) $(LIB_PATH) $(LIBS) -o $(NAME_SERVER)
+$(NAME_SERVER): $(OBJS_SERVER) $(LIB_STATIC)
+	$(CC) $(CCFLAGS) $(OBJS_SERVER) $(INCLUDE_FLAG) $(LIBS_FLAGS) -o $(NAME_SERVER)
 
-$(NAME_CLIENT): $(OBJS_CLIENT)
-	$(CC) $(CCFLAGS) $(OBJS_CLIENT) $(INCLUDE) $(LIB_PATH) $(LIBS) -o $(NAME_CLIENT)
+$(NAME_CLIENT): $(OBJS_CLIENT) $(LIB_STATIC)
+	$(CC) $(CCFLAGS) $(OBJS_CLIENT) $(INCLUDE_FLAG) $(LIBS_FLAGS) -o $(NAME_CLIENT)
 
 libs:
 	make all -C lib/libft
@@ -38,19 +41,19 @@ bonus: $(NAME_BONUS)
 
 $(NAME_BONUS): $(OBJS_BONUS)
 	make all -C lib/libft
-	$(CC) $(CCFLAGS) $(OBJS_BONUS) $(INCLUDE) $(LIB_PATH) $(LIBS) -o $(NAME_BONUS)
+	$(CC) $(CCFLAGS) $(OBJS_BONUS) $(INCLUDE_FLAG) $(LIBS_FLAGS) -o $(NAME_BONUS)
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	mkdir -p $(OBJ_PATH)
-	$(CC) $(CCFLAGS) -c $< -o $@ $(INCLUDE)
+	$(CC) $(CCFLAGS) -c $< -o $@ $(INCLUDE_FLAG)
 
 clean:
 	make clean -C lib/libft
-	$(RM) $(OBJS) $(OBJS_BONUS)
+	$(RM) $(OBJS_SERVER) $(OBJS_CLIENT) $(OBJS_BONUS)
 
 fclean: clean
 	make fclean -C lib/libft
-	$(RM) $(NAME) $(NAME_BONUS)
+	$(RM) $(NAME_SERVER) $(NAME_CLIENT) $(NAME_BONUS)
 
 re: fclean all bonus
 
