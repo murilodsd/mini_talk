@@ -2,11 +2,12 @@ CC=cc
 CCFLAGS=-Wall -Wextra -Werror -g
 NAME_SERVER=server
 NAME_CLIENT=client
+NAME=$(NAME_SERVER) $(NAME_CLIENT) 
 #NAME_BONUS=
 SRC_PATH=src/
 SRCS_NAMES_SERVER=server.c 
 SRCS=$(addprefix $(SRC_PATH), $(SRCS_NAMES_SERVER))
-SRCS_NAMES_CLIENT=client.c signals_utils.c
+SRCS_NAMES_CLIENT=client.c
 SRCS=$(addprefix $(SRC_PATH), $(SRCS_NAMES_CLIENT))
 #SRCS_NAMES_BONUS= 
 #SRCS_BONUS=$(addprefix $(SRC_PATH), $(SRCS_NAMES))
@@ -26,7 +27,7 @@ INCLUDE_FLAG=$(addprefix -I , $(INCLUDE_PATH))
 
 RM=rm -f
 
-all: libs $(NAME_SERVER) $(NAME_CLIENT) 
+all: libs $(NAME)
 
 $(NAME_SERVER): $(OBJS_SERVER) $(LIB_STATIC)
 	$(CC) $(CCFLAGS) $(OBJS_SERVER) $(INCLUDE_FLAG) $(LIBS_FLAGS) -o $(NAME_SERVER)
@@ -53,7 +54,7 @@ clean:
 
 fclean: clean
 	make fclean -C lib/libft
-	$(RM) $(NAME_SERVER) $(NAME_CLIENT) $(NAME_BONUS)
+	$(RM) $(NAME) $(NAME_BONUS)
 
 re: fclean all bonus
 
