@@ -6,13 +6,13 @@
 /*   By: mde-souz <mde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 20:13:15 by mde-souz          #+#    #+#             */
-/*   Updated: 2024/08/06 11:44:16 by mde-souz         ###   ########.fr       */
+/*   Updated: 2024/09/15 18:34:48 by mde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINI_TALK_H
 # define MINI_TALK_H
-# include "libft.h"
+# include "../lib/libft/include/libft.h"
 # include <signal.h>
 
 void	send_str_with_signal(int pid, char *byte);

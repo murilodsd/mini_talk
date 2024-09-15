@@ -6,11 +6,11 @@
 /*   By: mde-souz <mde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 10:05:57 by mde-souz          #+#    #+#             */
-/*   Updated: 2024/08/07 19:40:11 by mde-souz         ###   ########.fr       */
+/*   Updated: 2024/09/15 21:30:32 by mde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mini_talk.h"
+#include "../include/mini_talk.h"
 
 int	g_bit_received;
 
@@ -43,23 +43,11 @@ void	send_str_with_signal(int pid, char *str)
 				send_signal(SIGUSR2, pid);
 			while (!g_bit_received)
 				;
-			usleep(20000);
+			usleep(50);
 		}
 		free(byte);
-		usleep(20000);
+		usleep(50);
 		j++;
-	}
-}
-
-void	send_null_with_signal(int pid)
-{
-	int	j;
-
-	j = 8;
-	while (j--)
-	{
-		kill(pid, SIGUSR1);
-		usleep(4000);
 	}
 }
 
@@ -80,7 +68,6 @@ int	main(int argc, char *argv[])
 	if (signal(SIGUSR1, handler_sigusr) == SIG_ERR)
 		exit(EXIT_FAILURE);
 	send_str_with_signal(pid_server, argv[2]);
-	send_null_with_signal(pid_server);
 	ft_printf(1, "Mensagem recebida pelo processo pid %d\n", pid_server);
 	return (0);
 }

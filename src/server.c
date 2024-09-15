@@ -6,11 +6,11 @@
 /*   By: mde-souz <mde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 19:36:21 by mde-souz          #+#    #+#             */
-/*   Updated: 2024/08/07 21:15:16 by mde-souz         ###   ########.fr       */
+/*   Updated: 2024/09/15 21:28:46 by mde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mini_talk.h"
+#include "../include/mini_talk.h"
 
 char	*g_byte;
 
@@ -21,7 +21,17 @@ void	print_error_and_exit(char *error)
 	exit(EXIT_FAILURE);
 }
 
-static void	handler_sigint(int sig)
+/**
+ * @brief Signal handler function for SIGINT.
+ *
+ * This function is responsible for handling the SIGINT signal. 
+ * It frees the memory allocated for the variable g_byte
+ * then sets the signal handler to the default behavior,
+ * and sends the SIGINT signal to the current process.
+ * So the program can exit in a clean way
+ * @param sig The signal number.
+ */
+static void handler_sigint(int sig)
 {
 	free(g_byte);
 	signal(sig, SIG_DFL);
@@ -30,32 +40,29 @@ static void	handler_sigint(int sig)
 
 static void	handler_sigusr(int sig, siginfo_t *si, void *context)
 {
+	static int	i;
+	
 	(void)context;
 	if (sig == SIGUSR1)
 		*g_byte = '0';
 	else
 		*g_byte = '1';
 	g_byte++;
+	i++;
+	if (i == 8)
+	{
+		g_byte = g_byte - 8;
+		ft_printf(1, "%c", ft_byte_to_char(g_byte));
+		i = 0;
+	}
 	if (kill(si->si_pid, SIGUSR1) == -1)
 		print_error_and_exit("kill function failed");
 }
 
-static void	get_bytes_print_string(void)
+static void	get_bytes_then_print_string(void)
 {
-	char	*byte_start;
-	int		i;
-
-	byte_start = g_byte;
 	while (1)
-	{
-		i = 8;
-		while (i--)
-			pause();
-		g_byte = byte_start;
-		if (ft_byte_to_char(byte_start) == 0)
-			break ;
-		ft_printf(1, "%c", ft_byte_to_char(byte_start));
-	}
+		pause();
 }
 
 int	main(void)
@@ -77,7 +84,7 @@ int	main(void)
 	ft_printf(1, "SERVER PID: %d\n", getpid());
 	while (1)
 	{
-		get_bytes_print_string();
+		get_bytes_then_print_string();
 		ft_printf(1, "\n");
 	}
 	free(g_byte);
