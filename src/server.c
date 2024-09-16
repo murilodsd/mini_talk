@@ -6,7 +6,7 @@
 /*   By: mde-souz <mde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 19:36:21 by mde-souz          #+#    #+#             */
-/*   Updated: 2024/09/16 22:11:44 by mde-souz         ###   ########.fr       */
+/*   Updated: 2024/09/16 22:14:22 by mde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ int	main(void)
 	ft_bzero(&sa, sizeof(sa));
 	sa.sa_flags = SA_SIGINFO | SA_RESTART;
 	sa.sa_sigaction = handler_sigusr;
-	sigemptyset(&sa.sa_mask);
 	if (sigaction(SIGUSR1, &sa, NULL) == -1)
 		print_error_and_exit("Sigaction failed");
 	if (sigaction(SIGUSR2, &sa, NULL) == -1)
