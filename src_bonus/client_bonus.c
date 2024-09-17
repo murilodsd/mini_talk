@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mde-souz <mde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 10:05:57 by mde-souz          #+#    #+#             */
-/*   Updated: 2024/09/17 19:36:25 by mde-souz         ###   ########.fr       */
+/*   Updated: 2024/09/17 19:37:47 by mde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ static void	handler_sigusr(int sig)
  *
  * @note The program exits with EXIT_FAILURE
  * if the number of arguments is not equal to 3 or
- * if there is an error setting up the signal ha	ndler.
+ * if there is an error setting up the signal handler.
  */
 int	main(int argc, char *argv[])
 {
@@ -154,5 +154,6 @@ int	main(int argc, char *argv[])
 	if (signal(SIGUSR1, handler_sigusr) == SIG_ERR)
 		exit(EXIT_FAILURE);
 	send_str_with_signal(pid_server, argv[2]);
+	ft_printf(1, "Message received by the process pid %d\n", pid_server);
 	return (0);
 }

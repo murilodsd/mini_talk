@@ -6,7 +6,7 @@
 /*   By: mde-souz <mde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 14:52:36 by mde-souz          #+#    #+#             */
-/*   Updated: 2024/07/17 15:46:18 by mde-souz         ###   ########.fr       */
+/*   Updated: 2024/09/17 19:32:24 by mde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int		ft_putnbr_fd(int n, int fd);
 int		ft_isupper(int c);
 char	*ft_strjoin(char const *s1, char const *s2);
 int		ft_isdigit(int c);
+int		ft_isalldigits(char *str);
 int		ft_isprint(int c);
 int		ft_isalnum(int c);
 int		ft_isalpha(int c);
