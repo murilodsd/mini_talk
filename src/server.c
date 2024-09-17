@@ -6,14 +6,25 @@
 /*   By: mde-souz <mde-souz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 19:36:21 by mde-souz          #+#    #+#             */
-/*   Updated: 2024/09/16 22:14:22 by mde-souz         ###   ########.fr       */
+/*   Updated: 2024/09/17 10:49:09 by mde-souz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/mini_talk.h"
 
+/**
+ * A global pointer to a dynamically allocated memory
+ * used to receive the char binary.
+ */
 static char	*g_byte;
 
+/**
+ * @brief Fuction executed when there is an error.
+ *
+ * This function frees the global pointer memmory,
+ * prints the error message and exits the program.
+ * @param error The error message.
+ */
 void	print_error_and_exit(char *error)
 {
 	free(g_byte);
@@ -89,14 +100,16 @@ static void	handler_sigusr(int sig, siginfo_t *si, void *context)
 }
 
 /**
- * @brief Keeps the server on, waiting for a signal
+ * @brief Server program for handling signals.
+ *
+ * This program sets up signal handlers for SIGUSR1, SIGUSR2, and SIGINT signals.
+ * 
+ * The entry point of the server program. It initializes signal handlers and enters an infinite loop.
+ *
+ * Signal Handlers:
+ * - handler_sigusr: Function to handle SIGUSR1 and SIGUSR2 signals.
+ * - handler_sigint: Function to handle SIGINT signal.
  */
-static void	get_bytes_then_print_string(void)
-{
-	while (1)
-		pause();
-}
-
 int	main(void)
 {
 	struct sigaction	sa;
@@ -114,7 +127,8 @@ int	main(void)
 	if (signal(SIGINT, handler_sigint) == SIG_ERR)
 		print_error_and_exit("Signal failed");
 	ft_printf(1, "SERVER PID: %d\n", getpid());
-	get_bytes_then_print_string();
+	while (1)
+		pause();
 	free(g_byte);
 	return (0);
 }
